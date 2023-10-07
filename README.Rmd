@@ -65,6 +65,22 @@ Para usar la función `add_icvgrid()` debes tener en cuenta la resolución de la
 
 ```{r example}
 library(icvgridd)
-## basic example code
+
 ```
+
+- Listar la ruta de las imagenes:
+
+```{r eval=FALSE}
+## basic example code
+img <- icvgridd::read_icv_images(fs::path_package(package = "icvgridd",
+                                            "images"))
+img
+```
+
+- Agregar la cuadricula a las imágenes:
+
+```{r eval=FALSE}
+add_icvgrid(img_path = img, save = FALSE)
+```
+
 

@@ -90,5 +90,19 @@ de trabajo especifica.
 ``` r
 library(icvgridd)
 #> icvgridd is using ExifTool version 12.22
+```
+
+- Listar la ruta de las imagenes:
+
+``` r
 ## basic example code
+img <- icvgridd::read_icv_images(fs::path_package(package = "icvgridd",
+                                            "images"))
+img
+```
+
+- Agregar la cuadricula a las imágenes:
+
+``` r
+add_icvgrid(img_path = img, save = FALSE)
 ```
