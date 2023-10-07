@@ -1,0 +1,23 @@
+Package: icvgridd
+Title: Develop a Grid for Visual Contamination Index 
+Version: 0.0.0.9000
+Authors@R: 
+    person("Paul Efren", "Santos Andrade", , "paulefrens@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6635-0375"))
+Description: Extract metadata from images and generate gridded images for processing with the calculation of the Visual Contamination Index.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    curl,
+    dplyr,
+    ggplot2,
+    ggpubr,
+    here,
+    janitor,
+    jpeg,
+    jsonlite,
+    plyr,
+    rappdirs,
+    tibble
