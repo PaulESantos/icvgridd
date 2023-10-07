@@ -3,7 +3,8 @@
 #' Esta función toma una imagen y agrega una grilla con líneas de diferentes colores para ayudar en el cálculo del índice de contaminación visual.
 #'
 #' @param img_path Ruta al archivo de imagen.
-#' @param dpi dpi for image gridded save.
+#' @param dpi dpi resolucion empleada para guardar la imagen.
+#' @param save argumento que define si la imagen se guarda o visualiza, por defecto TRUE.
 #'
 #' @return La función guarda la imagen con la grilla añadida en un archivo con el nombre modificado.
 #'
@@ -11,7 +12,7 @@
 #' # Ejemplo de uso:
 #' # add_icvgrid("imagen.jpg")
 #' @export
-add_icvgrid <- function(img_path, dpi = 150) {
+add_icvgrid <- function(img_path, dpi = 150, save = TRUE) {
 meta <- icvgridd::read_exif(path = img_path) |>
   janitor::clean_names() |>
   dplyr::select(
@@ -101,17 +102,20 @@ plot1 <-
   ggplot2::coord_fixed(expand = FALSE)
 # ggplot2::coord_cartesian(expand = TRUE)
 
-print(plot1)
-
-file_extencion <- gsub("\\..*", "_grid.jpeg", img_path)
-ggplot2::ggsave(here::here(file_extencion),
-                plot = plot1,
-                dpi = dpi,
-                device = "jpeg",
-                height = meta_2$image_height,
-                width = meta_2$image_width,
-                units = "px",
-                limitsize = FALSE
-)
+if(save == TRUE) {
+  print(plot1)
+  file_extencion <- gsub("\\..*", "_grid.jpeg", img_path)
+  ggplot2::ggsave(here::here(file_extencion),
+                  plot = plot1,
+                  dpi = dpi,
+                  device = "jpeg",
+                  height = meta_2$image_height,
+                  width = meta_2$image_width,
+                  units = "px",
+                  limitsize = FALSE
+  )
+} else {
+  print(plot1)
+}
 
 }
