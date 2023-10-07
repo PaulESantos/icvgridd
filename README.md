@@ -99,10 +99,30 @@ library(icvgridd)
 img <- icvgridd::read_icv_images(fs::path_package(package = "icvgridd",
                                             "images"))
 img
+#> [1] "C:\\Users\\user\\AppData\\Local\\R\\win-library\\4.3\\icvgridd\\images\\img_1.jpeg"
 ```
 
 - Agregar la cuadricula a las imágenes:
 
 ``` r
 add_icvgrid(img_path = img, save = FALSE)
+#> Image resolution: 1 x 1 pixels
+#> The resolution its correct? (y/n):
+#>                            Enter preferred resolution (e.g. 96 or 72):
 ```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" /> - Al
+ejecutar esta función, se proporciona información sobre la resolución de
+cada uno de los archivos de imagen antes de generar la grilla. Si la
+resolución es la correcta, simplemente presiona la tecla `Enter`. En
+caso contrario, se te solicitará que revises la resolución de la imagen
+y que ingreses el valor correcto.
+
+## Referencias :
+
+- Arango, Carlos Andrés, Rodríguez-Martínez, Guillermo, &
+  Marroquín-Ciendúa, Fernando. (2021). La contaminación visual en
+  Bogotá: Análisis de cargas visuales en localidades con alta
+  estimulación publicitaria. Revista de Investigación, Desarrollo e
+  Innovación, 11(2), 373-386. Epub September 16,
+  2021.https://doi.org/10.19053/20278306.v11.n2.2021.12762
