@@ -126,3 +126,6 @@ y que ingreses el valor correcto.
   estimulación publicitaria. Revista de Investigación, Desarrollo e
   Innovación, 11(2), 373-386. Epub September 16,
   2021.https://doi.org/10.19053/20278306.v11.n2.2021.12762
+
+- Para usar estas funciones es necesario tener instalado perl, en
+  windows se puede descargar desde <https://strawberryperl.com/>
