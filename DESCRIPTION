@@ -16,7 +16,7 @@ Imports:
     ggpubr,
     here,
     janitor,
-    jpeg,
+    magick,
     jsonlite,
     plyr,
     rappdirs,
