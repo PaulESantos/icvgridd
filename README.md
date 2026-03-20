@@ -119,18 +119,16 @@ img
 - Agregar la cuadricula a las imágenes:
 
 ``` r
-add_icvgrid(img_path = img, save = FALSE)
+add_icvgrid(img_path = img, save = FALSE, resolution = 72)
 #> Image resolution: 1 x 1 pixels
-#> The resolution its correct? (y/n):
-#>                            Enter preferred resolution (e.g. 96 or 72):
+#> Using manual resolution: 72 dpi
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" /> - Al
 ejecutar esta función, se proporciona información sobre la resolución de
-cada uno de los archivos de imagen antes de generar la grilla. Si la
-resolución es la correcta, simplemente presiona la tecla `Enter`. En
-caso contrario, se te solicitará que revises la resolución de la imagen
-y que ingreses el valor correcto.
+cada archivo antes de generar la grilla. Si `exifr` no puede leer la
+resolución EXIF, puedes definirla manualmente con el argumento
+`resolution`, por ejemplo `resolution = 72`.
 
 ## Referencias :
 

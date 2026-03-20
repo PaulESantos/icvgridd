@@ -4,22 +4,28 @@
 \alias{add_icvgrid}
 \title{Añade una grilla a una imagen para el cálculo del índice de contaminación visual.}
 \usage{
-add_icvgrid(img_path, dpi = 150, save = TRUE)
+add_icvgrid(img_path, dpi = 150, save = TRUE, resolution = NULL)
 }
 \arguments{
 \item{img_path}{Ruta al archivo de imagen.}
 
 \item{dpi}{dpi resolucion empleada para guardar la imagen.}
 
-\item{save}{argumento que define si la imagen se guarda o visualiza, por defecto TRUE.}
+\item{save}{argumento que define si la imagen se guarda o visualiza, por
+defecto TRUE.}
+
+\item{resolution}{resolucion manual en dpi. Se usa cuando la resolucion no
+puede leerse desde los metadatos EXIF o cuando se desea forzar un valor.}
 }
 \value{
-La función guarda la imagen con la grilla añadida en un archivo con el nombre modificado.
+La función guarda la imagen con la grilla añadida en un archivo con
+el nombre modificado.
 }
 \description{
-Esta función toma una imagen y agrega una grilla con líneas de diferentes colores para ayudar en el cálculo del índice de contaminación visual.
+Esta función toma una imagen y agrega una grilla con líneas de diferentes
+colores para ayudar en el cálculo del índice de contaminación visual.
 }
 \examples{
 # Ejemplo de uso:
-# add_icvgrid("imagen.jpg")
+# add_icvgrid("imagen.jpg", resolution = 72)
 }
