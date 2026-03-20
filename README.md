@@ -4,6 +4,7 @@
 # icvgridd
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 La contaminación visual es un efecto en la percepción del espectador, el
@@ -77,8 +78,8 @@ Para instalar la version en desarrollo de `icvgridd` desde
 [GitHub](https://github.com/) puedes usar:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("PaulESantos/icvgridd", dependencies = TRUE)
+# install.packages("pak")
+pak::pak("PaulESantos/icvgridd")
 ```
 
 `icvgridd` necesita que el paquete `exifr` esté disponible para trabajar
@@ -92,8 +93,7 @@ icvgridd::ensure_exifr()
 Repositorio de `exifr`: <https://github.com/paleolimbot/exifr>
 
 Adicionalmente, para usar estas funciones es necesario tener instalado
-Perl. En Windows se puede descargar desde
-<https://strawberryperl.com/>.
+Perl. En Windows se puede descargar desde <https://strawberryperl.com/>.
 
 ## Ejemplo
 
@@ -103,7 +103,7 @@ de trabajo especifica.
 
 ``` r
 library(icvgridd)
-#> icvgridd is using ExifTool version 12.22
+#> icvgridd is using ExifTool version 12.85
 ```
 
 - Listar la ruta de las imagenes:
@@ -113,20 +113,35 @@ library(icvgridd)
 img <- icvgridd::read_icv_images(fs::path_package(package = "icvgridd",
                                             "images"))
 img
-#> [1] "C:\\Users\\user\\AppData\\Local\\R\\win-library\\4.3\\icvgridd\\images\\img_1.jpeg"
+#> [1] "C:\\Users\\PC\\AppData\\Local\\R\\win-library\\4.5\\icvgridd\\images\\img_1.jpeg"
+#> [2] "C:\\Users\\PC\\AppData\\Local\\R\\win-library\\4.5\\icvgridd\\images\\img_2.jpeg"
+#> [3] "C:\\Users\\PC\\AppData\\Local\\R\\win-library\\4.5\\icvgridd\\images\\img_3.png"
 ```
 
 - Agregar la cuadricula a las imágenes:
 
 ``` r
 add_icvgrid(img_path = img, save = FALSE, resolution = 72)
-#> Image resolution: 1 x 1 pixels
-#> Using manual resolution: 72 dpi
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" /> - Al
-ejecutar esta función, se proporciona información sobre la resolución de
-cada archivo antes de generar la grilla. Si `exifr` no puede leer la
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="" width="100%" />
+
+    #> Image resolution: 1 x 1 dpi
+    #> Using manual resolution: 72 dpi
+
+<img src="man/figures/README-unnamed-chunk-3-2.png" alt="" width="100%" /><img src="man/figures/README-unnamed-chunk-3-3.png" alt="" width="100%" />
+
+    #> Image resolution: 1 x 1 dpi
+    #> Using manual resolution: 72 dpi
+
+<img src="man/figures/README-unnamed-chunk-3-4.png" alt="" width="100%" /><img src="man/figures/README-unnamed-chunk-3-5.png" alt="" width="100%" />
+
+    #> Image resolution could not be read from EXIF metadata.
+    #> Using manual resolution: 72 dpi
+
+<img src="man/figures/README-unnamed-chunk-3-6.png" alt="" width="100%" /> -
+Al ejecutar esta función, se proporciona información sobre la resolución
+de cada archivo antes de generar la grilla. Si `exifr` no puede leer la
 resolución EXIF, puedes definirla manualmente con el argumento
 `resolution`, por ejemplo `resolution = 72`.
 
