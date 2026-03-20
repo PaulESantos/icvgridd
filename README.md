@@ -77,9 +77,23 @@ Para instalar la version en desarrollo de `icvgridd` desde
 [GitHub](https://github.com/) puedes usar:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("PaulESantos/icvgridd")
+# install.packages("remotes")
+remotes::install_github("PaulESantos/icvgridd", dependencies = TRUE)
 ```
+
+`icvgridd` necesita que el paquete `exifr` esté disponible para trabajar
+con metadatos EXIF y configurar ExifTool correctamente. Si `exifr` no
+está instalado, puedes verificarlo e instalarlo con:
+
+``` r
+icvgridd::ensure_exifr()
+```
+
+Repositorio de `exifr`: <https://github.com/paleolimbot/exifr>
+
+Adicionalmente, para usar estas funciones es necesario tener instalado
+Perl. En Windows se puede descargar desde
+<https://strawberryperl.com/>.
 
 ## Ejemplo
 
@@ -127,5 +141,5 @@ y que ingreses el valor correcto.
   Innovación, 11(2), 373-386. Epub September 16,
   2021.https://doi.org/10.19053/20278306.v11.n2.2021.12762
 
-- Para usar estas funciones es necesario tener instalado perl, en
-  windows se puede descargar desde <https://strawberryperl.com/>
+- Para usar estas funciones es necesario tener instalado Perl. En
+  Windows se puede descargar desde <https://strawberryperl.com/>

@@ -31,9 +31,11 @@ exiftool_call <- function(args = NULL, fnames = NULL, intern = FALSE, ..., quiet
 
   if(!quiet) message(paste(c(shQuote(command), args), collapse = " "))
   if(intern) {
-    command_stdout(command, args, ...)
+    dots <- list(...)
+    do.call(command_stdout, c(list(command = command, args = args), dots))
   } else {
-    system2(command, args, ...)
+    dots <- list(...)
+    do.call(system2_compat, c(list(command = command, args = args), dots))
   }
 }
 
@@ -259,7 +261,7 @@ test_command <- function(command, args = character(0), regex_stderr = NULL, rege
   command_out <- suppressWarnings(
     suppressMessages(
       try(
-        system2(command, args = args, stdout = out, stderr = err),
+        system2_compat(command, args = args, stdout = out, stderr = err),
         silent = TRUE
       )
     )
@@ -280,12 +282,12 @@ test_command <- function(command, args = character(0), regex_stderr = NULL, rege
   return(!inherits(command_out, "try-error"))
 }
 
-command_stdout <- function(command, args = character(0), ..., quiet = FALSE) {
+command_stdout <- function(command, args = character(0), env = NULL, ..., quiet = FALSE) {
   output <- tempfile()
   err <- tempfile()
   on.exit(unlink(c(output, err)))
 
-  system2(command, args, stdout = output, stderr = err, ...)
+  system2_compat(command, args, env = env, stdout = output, stderr = err, ...)
 
   if(file.exists(err) && !quiet) {
     for(line in readLines(err)) {
@@ -300,6 +302,49 @@ command_stdout <- function(command, args = character(0), ..., quiet = FALSE) {
   } else {
     ""
   }
+}
+
+system2_compat <- function(command, args = character(0), env = NULL, ...) {
+  if(.Platform$OS.type == "windows" && length(env) > 0) {
+    with_envvars(env, system2(command, args = args, ...))
+  } else {
+    system2(command, args = args, env = env, ...)
+  }
+}
+
+with_envvars <- function(env, code) {
+  if(length(env) == 0) {
+    return(force(code))
+  }
+
+  env_parts <- strsplit(env, "=", fixed = TRUE)
+  env_names <- vapply(env_parts, function(x) x[[1]], character(1))
+  env_values <- vapply(
+    env_parts,
+    function(x) paste(x[-1], collapse = "="),
+    character(1)
+  )
+
+  old_values <- Sys.getenv(env_names, unset = NA_character_)
+  on.exit({
+    to_restore <- !is.na(old_values)
+    if(any(to_restore)) {
+      restore <- as.list(old_values[to_restore])
+      names(restore) <- env_names[to_restore]
+      do.call(Sys.setenv, restore)
+    }
+
+    to_unset <- is.na(old_values)
+    if(any(to_unset)) {
+      do.call(Sys.unsetenv, as.list(env_names[to_unset]))
+    }
+  }, add = TRUE)
+
+  new_values <- as.list(env_values)
+  names(new_values) <- env_names
+  do.call(Sys.setenv, new_values)
+
+  force(code)
 }
 
 find_writable <- function(install_location) {

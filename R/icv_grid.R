@@ -25,14 +25,15 @@ gridd_drawing <- function(img_path, dpi = dpi, save = save){
   image_file <- magick::image_read(path = img_path)
 
   # get metadata of images with exiftool
-  meta <- icvgridd::read_exif(path = img_path) |>
-    janitor::clean_names() |>
-    dplyr::select(
-      file_name,
-      dplyr::contains("resolution"),
-      dplyr::contains("image"),
-      megapixels
-    )
+  meta <- dplyr::select(
+    janitor::clean_names(
+      icvgridd::read_exif(path = img_path)
+    ),
+    file_name,
+    dplyr::contains("resolution"),
+    dplyr::contains("image"),
+    megapixels
+  )
 
   print(ggplot2::ggplot(df, ggplot2::aes(x, y)) +
           ggpubr::background_image(image_file))
@@ -51,11 +52,11 @@ gridd_drawing <- function(img_path, dpi = dpi, save = save){
 
 
 
-  meta_2 <- meta |>
-    dplyr::mutate(
-      x_cm = (image_width / as.numeric(dpi_res)) / 0.393701,
-      y_cm = (image_height / as.numeric(dpi_res)) / 0.393701
-    )
+  meta_2 <- dplyr::mutate(
+    meta,
+    x_cm = (image_width / as.numeric(dpi_res)) / 0.393701,
+    y_cm = (image_height / as.numeric(dpi_res)) / 0.393701
+  )
 
   # New tibble with the grid coordinates
   df1 <- dplyr::tibble(
