@@ -18,8 +18,8 @@ defecto TRUE.}
 puede leerse desde los metadatos EXIF o cuando se desea forzar un valor.}
 }
 \value{
-La función guarda la imagen con la grilla añadida en un archivo con
-el nombre modificado.
+La función guarda la imagen con la grilla añadida en la misma carpeta
+del archivo original, con el sufijo \verb{_grid.jpeg}.
 }
 \description{
 Esta función toma una imagen y agrega una grilla con líneas de diferentes

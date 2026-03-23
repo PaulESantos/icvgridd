@@ -98,8 +98,8 @@ Perl. En Windows se puede descargar desde <https://strawberryperl.com/>.
 ## Ejemplo
 
 Para usar la función `add_icvgrid()` debes tener en cuenta la resolución
-de las imágenes y que las imágenes debe estar guardadas en una carpeta
-de trabajo especifica.
+de las imágenes. Si `save = TRUE`, el archivo resultante se guarda en la
+misma carpeta de la imagen original con el sufijo `_grid.jpeg`.
 
 ``` r
 library(icvgridd)

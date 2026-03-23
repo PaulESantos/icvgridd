@@ -10,8 +10,8 @@
 #' @param resolution resolucion manual en dpi. Se usa cuando la resolucion no
 #'   puede leerse desde los metadatos EXIF o cuando se desea forzar un valor.
 #'
-#' @return La función guarda la imagen con la grilla añadida en un archivo con
-#'   el nombre modificado.
+#' @return La función guarda la imagen con la grilla añadida en la misma carpeta
+#'   del archivo original, con el sufijo `_grid.jpeg`.
 #'
 #' @examples
 #' # Ejemplo de uso:
@@ -33,45 +33,48 @@ add_icvgrid <- function(img_path, dpi = 150, save = TRUE, resolution = NULL) {
     image_file <- magick::image_read(path = img_path)
     image_info <- magick::image_info(image_file)
 
-    # get metadata of images with exiftool
-    meta <- janitor::clean_names(
-      icvgridd::read_exif(path = img_path)
-    )
-
     image_width <- image_info$width[[1]]
     image_height <- image_info$height[[1]]
-
-    exif_x_resolution <- NA_real_
-    exif_y_resolution <- NA_real_
-
-    if(nrow(meta) > 0) {
-      if("x_resolution" %in% names(meta)) {
-        exif_x_resolution <- suppressWarnings(as.numeric(meta$x_resolution[[1]]))
-      }
-
-      if("y_resolution" %in% names(meta)) {
-        exif_y_resolution <- suppressWarnings(as.numeric(meta$y_resolution[[1]]))
-      }
-    }
 
     print(
       ggplot2::ggplot(df, ggplot2::aes(x, y)) +
         ggpubr::background_image(image_file)
     )
 
-    if(!is.na(exif_x_resolution) && !is.na(exif_y_resolution)) {
-      message(
-        "Image resolution: ",
-        exif_x_resolution,
-        " x ",
-        exif_y_resolution,
-        " dpi"
-      )
+    if(!is.null(resolution)) {
+      dpi_res <- as.numeric(resolution)
+      message("Using manual resolution: ", dpi_res, " dpi")
     } else {
-      message("Image resolution could not be read from EXIF metadata.")
-    }
+      # get metadata only when a manual resolution was not provided
+      meta <- janitor::clean_names(
+        icvgridd::read_exif(path = img_path)
+      )
 
-    if(is.null(resolution)) {
+      exif_x_resolution <- NA_real_
+      exif_y_resolution <- NA_real_
+
+      if(nrow(meta) > 0) {
+        if("x_resolution" %in% names(meta)) {
+          exif_x_resolution <- suppressWarnings(as.numeric(meta$x_resolution[[1]]))
+        }
+
+        if("y_resolution" %in% names(meta)) {
+          exif_y_resolution <- suppressWarnings(as.numeric(meta$y_resolution[[1]]))
+        }
+      }
+
+      if(!is.na(exif_x_resolution) && !is.na(exif_y_resolution)) {
+        message(
+          "Image resolution: ",
+          exif_x_resolution,
+          " x ",
+          exif_y_resolution,
+          " dpi"
+        )
+      } else {
+        message("Image resolution could not be read from EXIF metadata.")
+      }
+
       if(!is.na(exif_x_resolution) && exif_x_resolution > 0) {
         if(interactive()) {
           dpi_res <- readline(
@@ -92,9 +95,6 @@ add_icvgrid <- function(img_path, dpi = 150, save = TRUE, resolution = NULL) {
           "Supply a manual value with `resolution = ...`."
         )
       }
-    } else {
-      dpi_res <- as.numeric(resolution)
-      message("Using manual resolution: ", dpi_res, " dpi")
     }
 
     if(length(dpi_res) != 1 || is.na(dpi_res) || !is.finite(dpi_res) || dpi_res <= 0) {
@@ -163,11 +163,14 @@ add_icvgrid <- function(img_path, dpi = 150, save = TRUE, resolution = NULL) {
       ) +
       ggplot2::coord_fixed(expand = FALSE)
 
-    if(save == TRUE) {
+    if(isTRUE(save)) {
       print(plot1)
-      file_extencion <- gsub("\\..*", "_grid.jpeg", img_path)
+      file_extencion <- file.path(
+        dirname(img_path),
+        paste0(tools::file_path_sans_ext(basename(img_path)), "_grid.jpeg")
+      )
       ggplot2::ggsave(
-        here::here(file_extencion),
+        filename = file_extencion,
         plot = plot1,
         dpi = dpi,
         device = "jpeg",
